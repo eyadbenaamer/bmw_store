@@ -1,0 +1,23 @@
+POST http://localhost:3001/category/add
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImZhaXNhbCBhbGFnaWx5IiwiaWF0IjoxNzExNTAyNDQ0LCJleHAiOjE3MTIzNjY0NDR9.apBgOZhaHcD1F-c5cLAHTpcVpNvpeKQTNLf4kPYsqGc
+
+{"name": "اكسسوارات"}
+###
+PATCH  http://localhost:3001/category/edit
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImZhaXNhbCBhbGFnaWx5IiwiaWF0IjoxNzExNTAyNDQ0LCJleHAiOjE3MTIzNjY0NDR9.apBgOZhaHcD1F-c5cLAHTpcVpNvpeKQTNLf4kPYsqGc
+
+{"id":"66048873f0dfcea019c0562e","name": "اكسسوارات"}
+###
+DELETE   http://localhost:3001/category/delete
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImZhaXNhbCBhbGFnaWx5IiwiaWF0IjoxNzExNTAyNDQ0LCJleHAiOjE3MTIzNjY0NDR9.apBgOZhaHcD1F-c5cLAHTpcVpNvpeKQTNLf4kPYsqGc
+
+{"name": "اكسسوارات"}
+###
+POST http://localhost:3001/category/products
+Content-Type: application/json
+
+{"name": "اكسسوارات","page":1}
+###
