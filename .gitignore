@@ -2,7 +2,7 @@
 
 # dependencies
 /server/node_modules
-/server/public/storage/*
+# /server/public/storage/*
 /client/node_modules
 /.pnp
 .pnp.js
