@@ -56,8 +56,8 @@ const Product = () => {
               {product?.discount === 0 ? (
                 <span className="text-green-800 bold">{product?.price}د.ل</span>
               ) : (
-                <div className="text-xl">
-                  <span className="price-strike">{product?.price}د.ل</span>
+                <div className="text-xl text-center my-2">
+                  <div className="price-strike">{product?.price}د.ل</div>
                   <span className="text-green-800 bold">
                     {product.price - (product.price * product?.discount) / 100}
                     د.ل

@@ -36,8 +36,8 @@ const Product = (props) => {
           {discount === 0 ? (
             <span className="text-green-800 bold">{price}د.ل</span>
           ) : (
-            <div className="text-sm">
-              <span className="price-strike">{price}د.ل</span>
+            <div className="text-sm text-center">
+              <div className="price-strike">{price}د.ل</div>
               <span className="text-green-800 bold">
                 {price - (price * discount) / 100}د.ل
               </span>
