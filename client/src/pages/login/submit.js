@@ -1,14 +1,14 @@
 import axiosClient from "utils/AxiosClient";
 
 const submit = (data) => {
-  const response = axiosClient.post(`login`, data).then(
-    (resolved) => {
+  const response = axiosClient
+    .post(`login`, data)
+    .then((resolved) => {
       return resolved.data;
-    },
-    (rejected) => {
-      return rejected.response.data;
-    }
-  );
+    })
+    .catch((error) => {
+      return error.response.data;
+    });
   return response;
 };
 
