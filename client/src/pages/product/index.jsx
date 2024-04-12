@@ -22,7 +22,7 @@ const Product = () => {
         setIsAlertOpened(false);
       })
       .catch((result) => {
-        if (result.response && result.response === 404) {
+        if (result.response && result.response.status === 404) {
           setNotFound(true);
         } else {
           setIsAlertOpened(true);
