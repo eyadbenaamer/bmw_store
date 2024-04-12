@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import Category from "../models/category.js";
 import Product from "../models/product.js";
-
+import fs from "fs";
 /*CREATE*/
 
 export const addProduct = async (req, res) => {
@@ -185,10 +185,14 @@ export const deleteProduct = async (req, res) => {
       category.products.id(product.id).deleteOne();
       await category.save();
     }
+    product.files?.map((file) => {
+      const fileNameFragments = file.path.split("/");
+      const filename = fileNameFragments[fileNameFragments.length - 1];
+      fs.unlinkSync(`public/storage/${filename}`);
+    });
     product.deleteOne();
     return res.status(200).json({ message: "تم حذف المنتج." });
   } catch (error) {
-    console.log(error);
     return res
       .status(500)
       .json({ message: "حدث خطأ ما. الرجاء المحاولة في وقت لاحق." });

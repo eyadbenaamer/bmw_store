@@ -10,7 +10,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import productRoute from "./routes/product.js";
 import categoryRoute from "./routes/category.js";
-
+import { renameFile } from "./utils/renameFile.js";
 import {
   addProduct,
   deleteProduct,
@@ -43,7 +43,7 @@ const storage = multer.diskStorage({
     cb(null, "public/storage");
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    cb(null, renameFile(file.originalname));
   },
 });
 const upload = multer({ storage });
