@@ -20,7 +20,7 @@ const Delete = () => {
           return prev;
         });
       })
-      .catch((err) => {});
+      .catch(() => {});
   };
   const [isOpen, setIsOpen] = useState(false);
   return (
