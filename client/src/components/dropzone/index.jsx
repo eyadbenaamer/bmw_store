@@ -40,25 +40,22 @@ const DropZone = (props) => {
       />
       <div
         className="w-full min-h-[200px]"
-        onDragOver={() => {
+        onDragEnterCapture={(e) => {
           setIsDragging(true);
         }}
-        onDragLeave={() => {
-          setIsDragging(false);
-        }}
+        onDragLeave={() => setIsDragging(false)}
+        //TODO:search for a way to implement the drop function
+        // onDropCapture={(e) => {}}
       >
-        {isDragging ? (
-          <div
-            className="dropzone flex justify-center items-center
+        <div className="flex flex-col items-start gap-3">
+          {isDragging ? (
+            <div
+              className="dropzone flex justify-center items-center w-full
             p-5 border-dashed border-[var(--primary-color)] border-2 bg-300 cursor-pointer min-h-[200px]"
-            // onDragEndCapture={(e) => { //TODO:search for a way to implement the drop function
-            //   setIsDragging(false);
-            // }}
-          >
-            أفلت الملفات هنا
-          </div>
-        ) : (
-          <div className="flex flex-col items-start gap-3">
+            >
+              أفلت الملفات هنا
+            </div>
+          ) : (
             <div
               className="dropzone grid gap-2 w-full grid-cols-6
             p-5 border-solid border-[var(--primary-color)] border-2 bg-300 min-h-[200px]"
@@ -73,14 +70,14 @@ const DropZone = (props) => {
                   />
                 ))}
             </div>
-            <button
-              onClick={() => input.current.click()}
-              className="bg-[var(--primary-color)] h-[50px] w-[50px] radius "
-            >
-              <AddIcon stroke="white" />
-            </button>
-          </div>
-        )}
+          )}
+          <button
+            onClick={() => input.current.click()}
+            className="bg-[var(--primary-color)] h-[50px] w-[50px] radius"
+          >
+            <AddIcon stroke="white" />
+          </button>
+        </div>
       </div>
     </>
   );
