@@ -17,7 +17,7 @@ const Products = (props) => {
   const { children } = props;
   const [page, setPage] = useState(1);
   const [pagesCount, setPagesCount] = useState(0);
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(null);
   const [isAlertOpened, setIsAlertOpened] = useState(false);
   const isAdminPage = useLocation().pathname.startsWith("/admin");
   const [categories, setCategories] = useState([]);
@@ -42,7 +42,7 @@ const Products = (props) => {
         .get(`products/page/${page}`)
         .then((response) => {
           if (response.status === 200) {
-            setProducts(response.data.products);
+            setProducts(response.data.products || []);
             setPagesCount(response.data.pagesCount);
           }
           setIsAlertOpened(false);
@@ -70,7 +70,7 @@ const Products = (props) => {
           setIsAlertOpened(false);
         })
         .catch(() => {
-          setProducts(null);
+          setProducts(undefined);
           setIsAlertOpened(true);
         });
     }
@@ -95,34 +95,33 @@ const Products = (props) => {
         />
         <h1 className="heading self-start">المنتجات</h1>
         <div className="flex justify-start gap-2 flex-wrap">
-          {products &&
-            categories.map((category) => (
-              <button
-                key={category._id ?? 0}
-                className={`${
-                  selectedCategory === category.name
-                    ? "bg-primary text-white"
-                    : "bg-alt hover:bg-300"
-                } py-2 px-4 radius transition`}
-                onClick={() => {
-                  setProducts([]);
-                  setPagesCount(0);
-                  setSelectedCategory(category.name);
-                  setPage(1);
-                }}
-              >
-                {category.name}
-              </button>
-            ))}
+          {products !== undefined ||
+            (products == [] &&
+              categories.map((category) => (
+                <button
+                  key={category._id ?? 0}
+                  className={`${
+                    selectedCategory === category.name
+                      ? "bg-primary text-white"
+                      : "bg-alt hover:bg-300"
+                  } py-2 px-4 radius transition`}
+                  onClick={() => {
+                    setProducts(null);
+                    setPagesCount(0);
+                    setSelectedCategory(category.name);
+                    setPage(1);
+                  }}
+                >
+                  {category.name}
+                </button>
+              )))}
         </div>
         {/* in case there is no products */}
-        {!products && <>لا توجد منتجات</>}
-        {/* when loading */}
         {products?.length === 0 && (
-          <div>
-            <LoadingIcon className="icon" />
-          </div>
+          <div className="text-start w-full">لا توجد منتجات</div>
         )}
+        {/* when loading */}
+        {!products && <LoadingIcon className="icon" />}
         {/* when products fetched successfully */}
         {products?.length > 0 && (
           <div className="grid grid-cols-12 gap-6 items-center w-full">
@@ -145,7 +144,7 @@ const Products = (props) => {
           </div>
         )}
       </div>
-      {products && (
+      {products?.length > 0 && (
         <ReactPaginate
           containerClassName="flex flex-wrap justify-center gap-2"
           pageClassName="page"
@@ -161,7 +160,7 @@ const Products = (props) => {
           nextLabel={<NextIcon width={30} className="icon hovered" />}
           previousLabel={<PrevIcon width={30} className="icon hovered" />}
           onPageChange={(page) => {
-            setProducts([]);
+            setProducts(null);
             setPagesCount(0);
             setPage(page.selected + 1);
             window.scrollTo({
