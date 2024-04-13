@@ -195,6 +195,7 @@ export const deleteProduct = async (req, res) => {
     product.deleteOne();
     return res.status(200).json({ message: "تم حذف المنتج." });
   } catch (error) {
+    console.log(error);
     return res
       .status(500)
       .json({ message: "حدث خطأ ما. الرجاء المحاولة في وقت لاحق." });
