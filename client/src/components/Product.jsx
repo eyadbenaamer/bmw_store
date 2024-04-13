@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import noProductPhoto from "assets/no-product.jpg";
 const Product = (props) => {
   const {
     _id: id,
@@ -20,11 +20,13 @@ const Product = (props) => {
         aria-label={`صفحة المنتج ${name}`}
         to={`/product/${id}`}
       >
-        {files[0].fileType === "photo" ? (
-          <img className=" " src={files[0].path} alt={name} />
-        ) : (
-          <video src={files[0].path} />
-        )}
+        {files &&
+          (files[0].fileType === "photo" ? (
+            <img className="" src={files[0].path} alt={name} />
+          ) : (
+            <video src={files[0].path} />
+          ))}
+        {!files && <img src={noProductPhoto} alt={name} />}
       </Link>
       <div className=" h-[170px] bg-200 flex flex-col gap-2 justify-between p-4">
         <div className="flex justify-between items-center text-xl my-1 md:text-base">

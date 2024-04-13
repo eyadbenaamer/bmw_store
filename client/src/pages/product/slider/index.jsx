@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import SliderSeek from "./SliderSeek";
+import noProductPhoto from "assets/no-product.jpg";
 
 const Slider = (props) => {
   const { files } = props;
@@ -34,6 +35,13 @@ const Slider = (props) => {
         className="slider border-2 border-[var(--primary-color)]"
       >
         <div className="w-max h-[200px] sm:h-[400px]">
+          {!files && (
+            <div className="inline-block h-full">
+              <div className="slide">
+                <img src={noProductPhoto} />
+              </div>
+            </div>
+          )}
           {files?.map((file) => (
             <div className="inline-block h-full">
               <div className="slide">
