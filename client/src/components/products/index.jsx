@@ -24,16 +24,19 @@ const Products = (props) => {
   const [selectedCategory, setSelectedCategory] = useState("الكل");
   // to set categories names once the page is rendered
   useEffect(() => {
-    axiosClient.get(`category`).then((result) => {
-      setCategories([{ name: "الكل" }].concat(result.data));
-      let newCategories = [{ name: "الكل" }];
-      result.data.map((category) => {
-        if (category.products.length > 0) {
-          newCategories.push(category);
-        }
-      });
-      setCategories(newCategories);
-    });
+    axiosClient
+      .get(`category`)
+      .then((result) => {
+        setCategories([{ name: "الكل" }].concat(result.data));
+        let newCategories = [{ name: "الكل" }];
+        result.data.map((category) => {
+          if (category.products.length > 0) {
+            newCategories.push(category);
+          }
+        });
+        setCategories(newCategories);
+      })
+      .catch(() => setIsAlertOpened(true));
   }, []);
 
   const fetchProducts = () => {
