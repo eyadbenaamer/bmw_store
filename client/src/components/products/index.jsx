@@ -7,8 +7,8 @@ import { useLocation } from "react-router-dom";
 import ReloadBar from "components/ReloadBar";
 
 import { ReactComponent as LoadingIcon } from "assets/icons/loading-circle.svg";
-import { ReactComponent as NextIcon } from "assets/icons/arrow-prev.svg";
-import { ReactComponent as PrevIcon } from "assets/icons/arrow-next.svg";
+import { ReactComponent as NextIcon } from "assets/icons/arrow-left.svg";
+import { ReactComponent as PrevIcon } from "assets/icons/arrow-right.svg";
 import axiosClient from "utils/AxiosClient";
 
 export const ProductsContext = createContext();
