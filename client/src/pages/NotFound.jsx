@@ -1,5 +1,10 @@
+import Header from "components/header";
 const NotFound = () => {
-  return <div>NotFound</div>;
+  return (
+    <>
+      <Header />
+    </>
+  );
 };
 
 export default NotFound;
