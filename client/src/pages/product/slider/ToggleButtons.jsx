@@ -6,6 +6,7 @@ const ToggleButtons = (props) => {
     <>
       {currentSlide > 0 && (
         <button
+          aria-label="السابق"
           onClick={() => setCurrentSlide(currentSlide - 1)}
           className="absolute right-2 top-1/2 -translate-y-1.5 w-9 circle bg-200"
         >
@@ -14,6 +15,7 @@ const ToggleButtons = (props) => {
       )}
       {currentSlide !== slidesCount - 1 && (
         <button
+          aria-label="التالي"
           onClick={() => setCurrentSlide(currentSlide + 1)}
           className="absolute left-2 top-1/2 -translate-y-1.5 w-9 circle bg-200"
         >

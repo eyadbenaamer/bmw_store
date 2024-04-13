@@ -53,13 +53,13 @@ const Slider = (props) => {
                 </div>
               </div>
             )}
-            {files?.map((file) => (
+            {files?.map((file, i) => (
               <div className="inline-block h-full">
                 <div className="slide">
                   {file.fileType === "photo" ? (
-                    <img src={file.path} alt={file.name} />
+                    <img src={file.path} alt={`صورة ${i + 1}`} />
                   ) : (
-                    <video controls src={file.path} />
+                    <video controls alt={`فيديو ${i + 1}`} />
                   )}
                 </div>
               </div>

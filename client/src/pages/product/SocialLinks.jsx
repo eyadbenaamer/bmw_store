@@ -11,7 +11,7 @@ const SocialLinks = () => {
     <div className="my-5">
       <div className="my-4 bold">للحجز أو الطلب تواصل معنا عبر :</div>
       <div className="social flex gap-2">
-        <Link className="w-10 ">
+        <Link aria-label="راسلنا عبر فيسبوك" className="w-10 ">
           <FacebookIcon
             fill={svgFill}
             style={{ borderRadius: "50%" }}
@@ -19,6 +19,7 @@ const SocialLinks = () => {
           />
         </Link>
         <Link
+          aria-label="اطلب عبر واتساب"
           to={`https://wa.me/218910996617?text=${window.location.href}`}
           className="w-10"
         >
@@ -27,7 +28,7 @@ const SocialLinks = () => {
             className="transition hover:fill-[#25D366]"
           />
         </Link>
-        <Link className="w-10 relative">
+        <Link aria-label="راسلنا عبر إنستغرام" className="w-10 relative">
           <InstagramIcon className="absolute transition" fill="url(#colored)" />
           <InstagramIcon
             fill={svgFill}

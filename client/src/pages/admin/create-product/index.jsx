@@ -7,6 +7,7 @@ const CreateProduct = () => {
   return (
     <>
       <button
+        aria-label="add new product"
         className="bg-[var(--primary-color)] h-[50px] w-[50px] radius "
         onClick={() => setIsOpened(!isOpened)}
       >
