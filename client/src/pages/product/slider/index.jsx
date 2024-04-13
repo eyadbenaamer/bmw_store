@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import SliderSeek from "./SliderSeek";
 import noProductPhoto from "assets/no-product.jpg";
+import ToggleButtons from "./ToggleButtons";
+import { useWindowWidth } from "hooks/useWindowWidth";
 
 const Slider = (props) => {
   const { files } = props;
   const slider = useRef();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const windowWidth = useWindowWidth();
   useEffect(() => {
     if (slider) {
       const slidesCount = slider.current.children[0].children.length;
@@ -30,29 +33,38 @@ const Slider = (props) => {
   }, [slider.current, currentSlide]);
   return (
     <div className="flex flex-col">
-      <div
-        ref={slider}
-        className="slider border-2 border-[var(--primary-color)]"
-      >
-        <div className="w-max h-[200px] sm:h-[400px]">
-          {!files && (
-            <div className="inline-block h-full">
-              <div className="slide">
-                <img src={noProductPhoto} />
+      <div className="relative w-fit mx-auto">
+        {windowWidth > 768 && (
+          <ToggleButtons
+            slidesCount={files.length}
+            currentSlide={currentSlide}
+            setCurrentSlide={setCurrentSlide}
+          />
+        )}
+        <div
+          ref={slider}
+          className="slider border-2 border-[var(--primary-color)]"
+        >
+          <div className="w-max h-[200px] sm:h-[400px]">
+            {!files && (
+              <div className="inline-block h-full">
+                <div className="slide">
+                  <img src={noProductPhoto} />
+                </div>
               </div>
-            </div>
-          )}
-          {files?.map((file) => (
-            <div className="inline-block h-full">
-              <div className="slide">
-                {file.fileType === "photo" ? (
-                  <img src={file.path} alt={file.name} />
-                ) : (
-                  <video controls src={file.path} />
-                )}
+            )}
+            {files?.map((file) => (
+              <div className="inline-block h-full">
+                <div className="slide">
+                  {file.fileType === "photo" ? (
+                    <img src={file.path} alt={file.name} />
+                  ) : (
+                    <video controls src={file.path} />
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
       <SliderSeek
