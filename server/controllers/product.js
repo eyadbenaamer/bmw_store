@@ -187,9 +187,11 @@ export const deleteProduct = async (req, res) => {
     }
     if (process.env.ENVIRONMENT === "development") {
       product.files?.map((file) => {
-        const fileNameFragments = file.path.split("/");
-        const filename = fileNameFragments[fileNameFragments.length - 1];
-        fs.unlinkSync(`public/storage/${filename}`);
+        try {
+          const fileNameFragments = file.path.split("/");
+          const filename = fileNameFragments[fileNameFragments.length - 1];
+          fs.unlinkSync(`public/storage/${filename}`);
+        } catch (error) {}
       });
     }
     product.deleteOne();
