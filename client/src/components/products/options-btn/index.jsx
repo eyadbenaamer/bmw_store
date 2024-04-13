@@ -13,7 +13,7 @@ const OptionsBtn = (props) => {
   const optionsList = useRef(null);
   useCloseWidget(optionsList, setIsOpened);
   return (
-    <div className="relative">
+    <div ref={optionsList} className="relative">
       <button
         aria-label="post options"
         className={`aspect-square w-10 flex justify-center ${
@@ -31,8 +31,6 @@ const OptionsBtn = (props) => {
           className={`absolute  top-[105%] right-0 radius w-max overflow-hidden z-100 ${
             mode === "dark" ? "bg-300" : "bg-100"
           }`}
-          ref={optionsList}
-          // onClick={() => setIsOpen(!isOpen)}
         >
           <Delete id={product._id} />
           <Edit product={product} />
