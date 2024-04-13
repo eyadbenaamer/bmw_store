@@ -102,26 +102,29 @@ const Form = (props) => {
           onChange={(e) => handelChange(e)}
         />
       </div>
-      <div className="col-span-2">
-        <label htmlFor="description">قسم المنتج</label>
-        <div className="categories flex justify-start gap-2 flex-wrap">
-          {categories.map((category) => (
-            <button
-              key={category._id ?? 0}
-              className={`${
-                data.category === category.name
-                  ? "bg-primary"
-                  : "bg-alt hover:bg-300"
-              } py-2 px-4 radius transition`}
-              onClick={() =>
-                setData((prev) => ({ ...prev, category: category.name }))
-              }
-            >
-              {category.name}
-            </button>
-          ))}
+
+      {categories.length > 0 && (
+        <div className="col-span-2">
+          <label htmlFor="description">قسم المنتج</label>
+          <div className="categories flex justify-start gap-2 flex-wrap">
+            {categories.map((category) => (
+              <button
+                key={category._id ?? 0}
+                className={`${
+                  data.category === category.name
+                    ? "bg-primary"
+                    : "bg-alt hover:bg-300"
+                } py-2 px-4 radius transition`}
+                onClick={() =>
+                  setData((prev) => ({ ...prev, category: category.name }))
+                }
+              >
+                {category.name}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
       <div className="col-span-2 ">
         <label htmlFor="media">صور المنتج</label>
         <div className="mt-[2px]">
