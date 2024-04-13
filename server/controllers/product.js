@@ -185,11 +185,13 @@ export const deleteProduct = async (req, res) => {
       category.products.id(product.id).deleteOne();
       await category.save();
     }
-    product.files?.map((file) => {
-      const fileNameFragments = file.path.split("/");
-      const filename = fileNameFragments[fileNameFragments.length - 1];
-      fs.unlinkSync(`public/storage/${filename}`);
-    });
+    if (process.env.ENVIRONMENT === "development") {
+      product.files?.map((file) => {
+        const fileNameFragments = file.path.split("/");
+        const filename = fileNameFragments[fileNameFragments.length - 1];
+        fs.unlinkSync(`public/storage/${filename}`);
+      });
+    }
     product.deleteOne();
     return res.status(200).json({ message: "تم حذف المنتج." });
   } catch (error) {
