@@ -2,8 +2,8 @@ import { Types } from "mongoose";
 import Category from "../models/category.js";
 import Product from "../models/product.js";
 import fs from "fs";
+import sharp from "sharp";
 /*CREATE*/
-
 export const addProduct = async (req, res) => {
   const uploadsFolder = `${process.env.API_URL}/storage/`;
   try {
@@ -20,8 +20,18 @@ export const addProduct = async (req, res) => {
     if (media) {
       media.map((file, index) => {
         if (file.mimetype.startsWith("image")) {
+          const newName = `${Date.now()}.jpeg`;
+          const newPath = `./public/storage/${newName}`;
+          sharp(file.path)
+            .resize()
+            .jpeg({ quality: 50 })
+            .toFile(newPath)
+            .then(() => {
+              fs.unlinkSync(file.path);
+            })
+            .catch((error) => {});
           filesPaths.push({
-            path: `${uploadsFolder}${file.filename}`,
+            path: `${uploadsFolder}${newName}`,
             order: index,
             fileType: "photo",
           });
