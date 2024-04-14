@@ -1,8 +1,9 @@
 import { Types } from "mongoose";
 import Category from "../models/category.js";
 import Product from "../models/product.js";
+import { compressImage } from "../utils/compressImage.js";
 import fs from "fs";
-import sharp from "sharp";
+
 /*CREATE*/
 export const addProduct = async (req, res) => {
   const uploadsFolder = `${process.env.API_URL}/storage/`;
@@ -16,51 +17,46 @@ export const addProduct = async (req, res) => {
       category: categoryName,
     } = req.body;
     const { media } = req.files;
-    let filesPaths = [];
+    let newFiles = [];
     if (media) {
       media.map((file, index) => {
         if (file.mimetype.startsWith("image")) {
-          const newName = `${Date.now()}.jpeg`;
-          const newPath = `./public/storage/${newName}`;
-          sharp(file.path)
-            .resize()
-            .jpeg({ quality: 50 })
-            .toFile(newPath)
-            .then(() => {
-              fs.unlinkSync(file.path);
-            })
-            .catch((error) => {});
-          filesPaths.push({
+          //compress the image
+          const newName = compressImage(file.path);
+          newFiles.push({
             path: `${uploadsFolder}${newName}`,
-            order: index,
             fileType: "photo",
           });
         } else if (file.mimetype.startsWith("video")) {
-          filesPaths.push({
+          newFiles.push({
             path: `${uploadsFolder}${file.filename}`,
-            order: index,
             fileType: "video",
           });
         }
       });
     }
+
     const category = await Category.findOne({ name: categoryName });
+
     const newproduct = new Product({
       name: name.trim(),
       category: category
         ? { _id: new Types.ObjectId(category.id), name: category.name }
         : null,
       description: description?.trim(),
-      files: media ? filesPaths : null,
+      files: media ? newFiles : null,
       stock,
       price,
       discount: discount ? discount : 0,
     });
     await newproduct.save();
+
+    //if the product is associated with a category then it will be added to the category list
     if (category) {
       category.products.addToSet(newproduct);
       await category.save();
     }
+
     return res.status(201).json(newproduct);
   } catch (error) {
     console.log(error);
@@ -126,19 +122,18 @@ export const editProduct = async (req, res) => {
     const { id } = req.params;
     const { name, description, price, discount, stock, categoryId } = req.body;
     const { media } = req.files;
-    let filesPaths = [];
+    let newFiles = [];
     if (media) {
       media.map((file, index) => {
         if (file.mimetype.startsWith("image")) {
-          filesPaths.push({
-            path: `${uploadsFolder}${file.filename}`,
-            order: index,
+          const newName = compressImage(file.path);
+          newFiles.push({
+            path: `${uploadsFolder}${newName}`,
             fileType: "photo",
           });
         } else if (file.mimetype.startsWith("video")) {
-          filesPaths.push({
+          newFiles.push({
             path: `${uploadsFolder}${file.filename}`,
-            order: index,
             fileType: "video",
           });
         }
@@ -168,7 +163,7 @@ export const editProduct = async (req, res) => {
     }
     name ? (product.name = name.trim()) : null;
     description ? (product.description = description.trim()) : null;
-    media ? (product.files = filesPaths) : null;
+    media ? (product.files = newFiles) : null;
     stock ? (product.stock = stock) : null;
     price ? (product.price = price) : null;
     discount ? (product.discount = discount) : null;

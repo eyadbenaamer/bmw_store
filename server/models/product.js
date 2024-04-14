@@ -9,7 +9,6 @@ export const productSchema = new Schema({
   files: [
     {
       path: String,
-      order: Number,
       fileType: String,
     },
   ],
