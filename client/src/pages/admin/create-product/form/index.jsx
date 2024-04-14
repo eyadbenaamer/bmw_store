@@ -1,10 +1,10 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { submit } from "./submit";
-import { useSelector } from "react-redux";
 import DropZone from "components/dropzone";
 import ReloadBar from "components/ReloadBar";
 import { ProductsContext } from "components/products";
 import axiosClient from "utils/AxiosClient";
+import { ReactComponent as LoadingIcon } from "assets/icons/loading-circle.svg";
 
 const Form = (props) => {
   const { setIsOpened } = props;
@@ -42,6 +42,8 @@ const Form = (props) => {
   });
   const [categories, setCategories] = useState([]);
   const [isAlertOpened, setIsAlertOpened] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const fetchCategories = () => {
     axiosClient
       .get(`category`)
@@ -102,7 +104,6 @@ const Form = (props) => {
           onChange={(e) => handelChange(e)}
         />
       </div>
-
       {categories.length > 0 && (
         <div className="col-span-2">
           <label htmlFor="description">قسم المنتج</label>
@@ -211,18 +212,24 @@ const Form = (props) => {
           disabled() ? "opacity-75" : ""
         } self-center py-2 px-4 radius text-white`}
         onClick={() => {
-          setIsOpened(false);
-          submit(data, files).then(() => {
-            if (
-              selectedCategory === "الكل" ||
-              selectedCategory === data.category
-            ) {
-              fetchProducts();
-            }
-          });
+          setIsLoading(true);
+          submit(data, files)
+            .then(() => {
+              setIsOpened(false);
+              if (
+                selectedCategory === "الكل" ||
+                selectedCategory === data.category
+              ) {
+                fetchProducts();
+              }
+            })
+            .catch(() => {})
+            .finally(() => {
+              setIsLoading(false);
+            });
         }}
       >
-        إضافة
+        {isLoading ? <LoadingIcon width={24} height={24} /> : <>إضافة</>}
       </button>
     </div>
   );
