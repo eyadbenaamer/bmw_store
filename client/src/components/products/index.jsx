@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { createContext, useEffect, useRef, useState } from "react";
 import ReactPaginate from "react-paginate";
 import OptionsBtn from "./options-btn";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import ReloadBar from "components/ReloadBar";
 
 import { ReactComponent as LoadingIcon } from "assets/icons/loading-circle.svg";
@@ -15,13 +15,21 @@ export const ProductsContext = createContext();
 
 const Products = (props) => {
   const { children } = props;
-  const [page, setPage] = useState(1);
+
+  const [searchParams, setSearchParams] = useSearchParams({
+    page: "1",
+    category: "الكل",
+  });
   const [pagesCount, setPagesCount] = useState(0);
   const [products, setProducts] = useState(null);
   const [isAlertOpened, setIsAlertOpened] = useState(false);
-  const isAdminPage = useLocation().pathname.startsWith("/admin");
+  const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("الكل");
+  const [message, setMessage] = useState("");
+  const isAdminPage = useLocation().pathname.startsWith("/admin");
+
+  const page = searchParams.get("page");
+  const selectedCategory = searchParams.get("category");
   // to set categories names once the page is rendered
   useEffect(() => {
     axiosClient
@@ -38,8 +46,8 @@ const Products = (props) => {
       })
       .catch(() => setIsAlertOpened(true));
   }, []);
-
   const fetchProducts = () => {
+    setIsLoading(true);
     if (selectedCategory === "الكل") {
       axiosClient
         .get(`products/page/${page}`)
@@ -50,13 +58,21 @@ const Products = (props) => {
           }
           setIsAlertOpened(false);
         })
-        .catch(() => {
-          setProducts(null);
-          setIsAlertOpened(true);
-        });
+        .catch((error) => {
+          if (error.response?.status === 404) {
+            setMessage(error.response.data.message);
+          } else {
+            setProducts(null);
+            setIsAlertOpened(true);
+          }
+        })
+        .finally(() => setIsLoading(false));
     } else {
       axiosClient
-        .post(`category/products/`, { name: selectedCategory, page })
+        .post(`category/products/`, {
+          name: searchParams.get("category"),
+          page: page,
+        })
         .then((response) => {
           if (response.status === 200) {
             categories.map((item) => {
@@ -72,15 +88,24 @@ const Products = (props) => {
           }
           setIsAlertOpened(false);
         })
-        .catch(() => {
-          setProducts(undefined);
-          setIsAlertOpened(true);
-        });
+        .catch((error) => {
+          if (error.response?.status === 404) {
+            setMessage(error.response.data.message);
+          } else {
+            setProducts(undefined);
+            setIsAlertOpened(true);
+          }
+        })
+        .finally(() => setIsLoading(false));
     }
   };
   useEffect(() => {
+    setMessage("");
     fetchProducts();
-  }, [page, selectedCategory]);
+    if (products?.length === 0) {
+      setMessage("لا توجد منتجات");
+    }
+  }, [searchParams, categories]);
   const productsRef = useRef();
   return (
     <ProductsContext.Provider
@@ -98,35 +123,42 @@ const Products = (props) => {
         />
         <h1 className="heading self-start">المنتجات</h1>
         <div className="flex justify-start gap-2 flex-wrap">
-          {products !== undefined ||
-            (products == [] &&
-              categories.map((category) => (
-                <button
-                  key={category._id ?? 0}
-                  className={`${
-                    selectedCategory === category.name
-                      ? "bg-primary text-white"
-                      : "bg-alt hover:bg-300"
-                  } py-2 px-4 radius transition`}
-                  onClick={() => {
+          {(products !== undefined || products == []) &&
+            categories.map((category) => (
+              <button
+                key={category._id ?? 0}
+                className={`${
+                  selectedCategory === category.name
+                    ? "bg-primary text-white"
+                    : "bg-alt hover:bg-300"
+                } py-2 px-4 radius transition`}
+                onClick={() => {
+                  if (selectedCategory !== category.name) {
                     setProducts(null);
                     setPagesCount(0);
-                    setSelectedCategory(category.name);
-                    setPage(1);
-                  }}
-                >
-                  {category.name}
-                </button>
-              )))}
+                    setSearchParams(
+                      (prev) => {
+                        prev.set("category", category.name);
+                        prev.set("page", 1);
+                        return prev;
+                      },
+                      {
+                        replace: true,
+                      }
+                    );
+                  }
+                }}
+              >
+                {category.name}
+              </button>
+            ))}
         </div>
         {/* in case there is no products */}
-        {products?.length === 0 && (
-          <div className="text-start w-full">لا توجد منتجات</div>
-        )}
+        {message && <div className="text-start w-full">{message}</div>}
         {/* when loading */}
-        {!products && <LoadingIcon className="icon" />}
+        {isLoading && <LoadingIcon className="icon" />}
         {/* when products fetched successfully */}
-        {products?.length > 0 && (
+        {!isLoading && products?.length > 0 && (
           <div className="grid grid-cols-12 gap-6 items-center w-full">
             {products.map((product) => (
               <motion.div
@@ -160,18 +192,34 @@ const Products = (props) => {
           previousLinkClassName=""
           activeClassName="active"
           breakLabel="..."
-          nextLabel={<NextIcon width={30} className="icon hovered" />}
-          previousLabel={<PrevIcon width={30} className="icon hovered" />}
+          nextLabel={
+            parseInt(page) !== pagesCount ? (
+              <NextIcon width={30} className="icon hovered" />
+            ) : null
+          }
+          previousLabel={
+            parseInt(page) > 1 ? (
+              <PrevIcon width={30} className="icon hovered" />
+            ) : null
+          }
           onPageChange={(page) => {
-            setProducts(null);
-            setPagesCount(0);
-            setPage(page.selected + 1);
+            setSearchParams(
+              (prev) => {
+                prev.set("page", page.selected + 1);
+                return prev;
+              },
+              {
+                replace: true,
+              }
+            );
             window.scrollTo({
               top: productsRef.current.offsetTop - 70,
             });
+            setPagesCount(0);
           }}
           pageCount={pagesCount}
           pageRangeDisplayed={2}
+          forcePage={parseInt(page) > 1 ? parseInt(page) - 1 : undefined}
           renderOnZeroPageCount={null}
         />
       )}

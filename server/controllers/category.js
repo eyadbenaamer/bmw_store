@@ -40,13 +40,16 @@ export const getProductsByCategory = async (req, res) => {
   try {
     const { name, page } = req.body;
     const category = await Category.findOne({ name });
+    if (!category) {
+      return res.status(404).json({ message: "لا يوجد قسم بهذا الأسم." });
+    }
     const statingProduct = (page - 1) * 12;
     const endingProduct = page * 12;
     const productsListIds = category.products
       .reverse()
       .slice(statingProduct, endingProduct);
     if (!productsListIds[0]) {
-      return res.status(200).json([]);
+      return res.status(404).json({ message: "هذه الصفحة غير موجودة." });
     }
     let productsList = [];
     for (let i = 0; i < productsListIds.length; i++) {
@@ -55,6 +58,7 @@ export const getProductsByCategory = async (req, res) => {
     }
     return res.status(200).json(productsList);
   } catch (error) {
+    console.log(error);
     return res
       .status(500)
       .json({ message: "حدث خطأ ما. الرجاء المحاولة في وقت لاحق." });
