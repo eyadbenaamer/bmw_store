@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { ReactComponent as AddIcon } from "assets/icons/add.svg";
 import File from "./File";
 
@@ -44,20 +44,20 @@ const DropZone = (props) => {
           setIsDragging(true);
         }}
         onDragLeave={() => setIsDragging(false)}
-        //TODO:search for a way to implement the drop function
-        // onDropCapture={(e) => {}}
       >
         <div className="flex flex-col items-start gap-3">
           {isDragging ? (
             <div
-              className="dropzone flex justify-center items-center w-full
+              style={{ borderRadius: 8 }}
+              className="flex justify-center items-center w-full
             p-5 border-dashed border-[var(--primary-color)] border-2 bg-300 cursor-pointer min-h-[200px]"
             >
               أفلت الملفات هنا
             </div>
           ) : (
             <div
-              className="dropzone grid gap-2 w-full grid-cols-6
+              style={{ borderRadius: 8 }}
+              className="grid gap-2 w-full grid-cols-6
             p-5 border-solid border-[var(--primary-color)] border-2 bg-300 min-h-[200px]"
             >
               {filesPreview &&

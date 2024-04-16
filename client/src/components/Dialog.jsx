@@ -22,11 +22,11 @@ const Dialog = (props) => {
       <dialog
         ref={prompt}
         aria-busy={true}
-        className="text-inherit w-full fixed top-0 bg-[#00000063] h-[100vh] flex items-center justify-center z-[100]"
+        className="text-inherit w-full fixed top-0 bg-[#00000063] h-[100dvh] flex items-center justify-center z-[100]"
       >
         <section
           dir="ltr"
-          className="dialog bg-200 px-4 py-3 h-fit max-h-[100vh]"
+          className="dialog bg-200 px-4 py-3 h-fit max-h-[100dvh]"
         >
           <button
             className="cursor-pointer w-5"

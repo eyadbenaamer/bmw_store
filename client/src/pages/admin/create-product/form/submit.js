@@ -10,7 +10,6 @@ export const submit = (data, media) => {
       formData.append("media", media[file]);
     }
   }
-
   return axiosClient.post(`products/add`, formData).then((response) => {
     return response.data;
   });

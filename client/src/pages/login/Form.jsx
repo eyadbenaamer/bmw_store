@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import submit from "./submit";
 import { useDispatch, useSelector } from "react-redux";
 import { setToken } from "state";
-import { Link, Navigate } from "react-router-dom";
 import { ReactComponent as ShowPasswordIcon } from "assets/icons/show.svg";
 import { ReactComponent as HidePasswordIcon } from "assets/icons/hide.svg";
 import { ReactComponent as LoadingIcon } from "assets/icons/loading-circle.svg";

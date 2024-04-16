@@ -30,11 +30,7 @@ const Menu = () => {
             <Link to={"/admin/manage-categories"}>
               <li className="flex justify-between py-2 px-3 radius gap-3 bg-hovered text-hovered">
                 <span>إدارة الأقسام</span>
-                <SettingsIcon
-                  className="icon hovered"
-                  // style={{ display: "inline", marginRight: 10, marginLeft: -1 }}
-                  width={16}
-                />
+                <SettingsIcon className="icon hovered" width={16} />
               </li>
             </Link>
             <li

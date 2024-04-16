@@ -1,4 +1,3 @@
-import Header from "components/header";
 import Products from "components/products";
 import UserHeader from "components/user-header";
 import Landing from "./Landing";

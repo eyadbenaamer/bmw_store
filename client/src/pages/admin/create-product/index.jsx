@@ -2,8 +2,10 @@ import Dialog from "components/Dialog";
 import { useState } from "react";
 import Form from "./form";
 import { ReactComponent as AddIcon } from "assets/icons/add.svg";
+
 const CreateProduct = () => {
   const [isOpened, setIsOpened] = useState(false);
+
   return (
     <>
       <button

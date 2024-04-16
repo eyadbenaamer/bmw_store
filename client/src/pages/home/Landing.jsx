@@ -37,7 +37,6 @@ const Landing = () => {
                 className="transition overflow-hidden hover:fill-[#1877F2] hover:bg-white"
               />
             </Link>
-
             <Link
               aria-label={"حسابنا على واتساب"}
               to={`https://wa.me/218910996617`}

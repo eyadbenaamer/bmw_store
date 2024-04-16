@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import noProductPhoto from "assets/no-product.jpg";
 const Product = (props) => {

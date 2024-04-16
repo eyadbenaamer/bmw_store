@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { ReactComponent as CloseIcon } from "assets/icons/cross.svg";
 
 const Alert = (props) => {
