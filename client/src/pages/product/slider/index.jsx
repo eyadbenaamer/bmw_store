@@ -36,7 +36,7 @@ const Slider = (props) => {
       <div className="relative w-fit mx-auto">
         {windowWidth > 768 && (
           <ToggleButtons
-            slidesCount={files.length}
+            slidesCount={files?.length}
             currentSlide={currentSlide}
             setCurrentSlide={setCurrentSlide}
           />
