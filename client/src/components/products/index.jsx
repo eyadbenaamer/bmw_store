@@ -30,8 +30,7 @@ const Products = (props) => {
 
   const page = searchParams.get("page");
   const selectedCategory = searchParams.get("category");
-  // to set categories names once the page is rendered
-  useEffect(() => {
+  const fetchCategories = () => {
     axiosClient
       .get(`category`)
       .then((result) => {
@@ -45,7 +44,7 @@ const Products = (props) => {
         setCategories(newCategories);
       })
       .catch(() => setIsAlertOpened(true));
-  }, []);
+  };
   const fetchProducts = () => {
     setIsLoading(true);
     if (selectedCategory === "الكل") {
@@ -99,6 +98,12 @@ const Products = (props) => {
         .finally(() => setIsLoading(false));
     }
   };
+
+  // to set categories names once the page is rendered
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
   useEffect(() => {
     setMessage("");
     fetchProducts();
@@ -109,7 +114,14 @@ const Products = (props) => {
   const productsRef = useRef();
   return (
     <ProductsContext.Provider
-      value={{ selectedCategory, setProducts, fetchProducts }}
+      value={{
+        selectedCategory,
+        setProducts,
+        fetchProducts,
+        fetchCategories,
+        setSearchParams,
+        products,
+      }}
     >
       {children}
       <div

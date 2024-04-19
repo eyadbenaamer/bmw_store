@@ -8,15 +8,30 @@ import { ProductsContext } from "..";
 
 const Delete = (props) => {
   const { id } = props;
-  const { fetchProducts } = useContext(ProductsContext);
+  const { products, fetchProducts, fetchCategories, setSearchParams } =
+    useContext(ProductsContext);
   const deleteProduct = () => {
     setIsOpen(false);
     axiosClient
       .delete(`products/delete/${id}`)
       .then(() => {
-        fetchProducts();
+        if (products?.length > 1) {
+          fetchProducts();
+        } else if (products?.length === 1) {
+          setSearchParams(
+            (prev) => {
+              prev.set("category", "الكل");
+              prev.set("page", 1);
+              return prev;
+            },
+            {
+              replace: true,
+            }
+          );
+        }
+        fetchCategories();
       })
-      .catch((err) => {});
+      .catch(() => {});
   };
   const [isOpen, setIsOpen] = useState(false);
   return (
