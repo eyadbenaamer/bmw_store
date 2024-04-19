@@ -19,11 +19,11 @@ const File = (props) => {
       >
         <CloseIcon stroke="var(--primary-color)" />
       </button>
-      <div className="radius overflow-hidden border-2 border-[var(--primary-color)] aspect-square">
+      <div className="radius image-container overflow-hidden border-2 border-[var(--primary-color)] aspect-square">
         {file.type.startsWith("image") ? (
-          <img className="max-w-full min-h-full" src={filePreview} />
+          <img src={filePreview} />
         ) : (
-          <video className="max-w-full min-h-full bg-black" src={filePreview} />
+          <video src={filePreview} />
         )}
       </div>
     </div>

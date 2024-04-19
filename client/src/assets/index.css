@@ -147,9 +147,10 @@ header {
   background: black;
 }
 
-.image-container img {
+.image-container img,
+.image-container video {
   height: 100%;
-  max-width: unset;
+  object-fit: cover;
 }
 
 .image-circle {
