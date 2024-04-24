@@ -1,15 +1,17 @@
 import fs from "fs";
 import sharp from "sharp";
-export const compressImage = (path) => {
-  const newName = `${Date.now()}.jpeg`;
+export const compressImage = (file, index) => {
+  let newName = `${Date.now()}-${index}.jpeg`;
   const newPath = `./public/storage/${newName}`;
-  sharp(path)
+  sharp(file.path)
     .resize()
     .jpeg({ quality: 50 })
     .toFile(newPath)
     .then(() => {
-      fs.unlinkSync(path);
+      fs.unlinkSync(file.path);
     })
-    .catch(() => {});
+    .catch(() => {
+      newName = file.filename;
+    });
   return newName;
 };
