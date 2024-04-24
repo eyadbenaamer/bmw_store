@@ -23,7 +23,6 @@ export const addProduct = async (req, res) => {
         if (file.mimetype.startsWith("image")) {
           //compress the image
           const newName = compressImage(file, index);
-          console.log(newName);
           newFiles.push({
             path: `${uploadsFolder}${newName}`,
             fileType: "photo",
