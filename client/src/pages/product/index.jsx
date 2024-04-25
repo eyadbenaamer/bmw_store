@@ -46,7 +46,11 @@ const Product = () => {
         />
       </div>
       {/* if the product is fetched successfully */}
-      {product && <Slider files={product?.files} />}
+      {product && (
+        <div className="container">
+          <Slider files={product?.files} />
+        </div>
+      )}
       <section className="container bg-200 p-4 my-5 radius shadow-md">
         <div className="flex justify-between gap-2 px-2 my-4">
           <h1 className="text-3xl">{product?.name}</h1>

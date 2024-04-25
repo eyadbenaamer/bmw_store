@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import SliderSeek from "./SliderSeek";
 import noProductPhoto from "assets/no-product.jpg";
 import ToggleButtons from "./ToggleButtons";
@@ -9,18 +9,21 @@ const Slider = (props) => {
   const slider = useRef();
   const [currentSlide, setCurrentSlide] = useState(0);
   const windowWidth = useWindowWidth();
+  const [slideWidth, setSlideWidth] = useState(slider.current?.clientWidth);
+  useEffect(() => {
+    setSlideWidth(slider.current?.clientWidth);
+  }, [windowWidth]);
+
   useEffect(() => {
     if (slider) {
-      const slidesCount = slider.current.children[0].children.length;
-      const sildeWidth = slider.current.children[0].offsetWidth / slidesCount;
-      slider.current.addEventListener("scroll", () => {
-        const scroll = slider.current.scrollLeft * -1;
-        if (scroll / sildeWidth == Math.ceil(scroll / sildeWidth)) {
-          setCurrentSlide(scroll / sildeWidth);
+      slider.current.addEventListener("scrollend", () => {
+        const scroll = Math.round(slider.current.scrollLeft * -1);
+        if (scroll / slideWidth == Math.round(scroll / slideWidth)) {
+          setCurrentSlide(Math.round(scroll / slideWidth));
         }
       });
       slider.current.scrollTo({
-        left: -currentSlide * sildeWidth,
+        left: -currentSlide * slideWidth,
         behavior: "smooth",
       });
     }
@@ -30,10 +33,10 @@ const Slider = (props) => {
       left: activeSlidePreveiw?.offsetLeft - 50,
       behavior: "smooth",
     });
-  }, [slider.current, currentSlide]);
+  }, [slider.current?.clientWidth, currentSlide]);
   return (
-    <div className="flex flex-col">
-      <div className="relative w-fit mx-auto">
+    <div className="flex flex-col w-full">
+      <div className="relative w-full mx-auto">
         {windowWidth > 768 && (
           <ToggleButtons
             slidesCount={files?.length}
@@ -43,28 +46,33 @@ const Slider = (props) => {
         )}
         <div
           ref={slider}
-          className="slider border-2 border-[var(--primary-color)]"
+          className="slider w-full border-2 border-[var(--primary-color)]"
         >
-          <div className="w-max h-[200px] sm:h-[400px]">
-            {!files && (
-              <div className="inline-block h-full">
-                <div className="slide">
-                  <img src={noProductPhoto} />
-                </div>
+          {!files && (
+            <div className="h-[200px] sm:h-[400px] w-full">
+              <div className="slide">
+                <img src={noProductPhoto} />
               </div>
-            )}
-            {files?.map((file, i) => (
-              <div className="inline-block h-full">
-                <div className="slide">
-                  {file.fileType === "photo" ? (
-                    <img src={file.path} alt={`صورة ${i + 1}`} />
-                  ) : (
-                    <video controls alt={`فيديو ${i + 1}`} />
-                  )}
+            </div>
+          )}
+          {files && slideWidth && (
+            <div className="w-max h-[200px] sm:h-[400px]">
+              {files.map((file, i) => (
+                <div
+                  className="inline-block h-full"
+                  style={{ width: slideWidth }}
+                >
+                  <div className="slide">
+                    {file.fileType === "photo" ? (
+                      <img src={file.path} alt={`صورة ${i + 1}`} />
+                    ) : (
+                      <video controls alt={`فيديو ${i + 1}`} />
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
       <SliderSeek
